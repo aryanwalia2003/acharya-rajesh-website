@@ -1,34 +1,66 @@
-// acharya-astrology-blog/scripts/migrate.ts
-const { Client } = require('pg');
-const fs = require('fs');
-const path = require('path');
-const dotenv = require('dotenv');
+import { Client } from 'pg';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
 // Load env vars from the root .env
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
-async function migrate() {
+async function runMigrations() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
   });
 
   try {
     await client.connect();
-    console.log("Connected to database for migration...");
+    console.log('🚀 Starting Migrations...');
 
-    // Path to your init.sql (adjust if needed)
-    const sqlPath = path.join(__dirname, '../../db-init/init.sql');
-    const sql = fs.readFileSync(sqlPath, 'utf8');
+    // 1. Create tracking table if it doesn't exist
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS _migrations (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL,
+        executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-    console.log("Running init.sql...");
-    await client.query(sql);
-    
-    console.log("✅ Database schema applied successfully!");
-  } catch (err) {
-    console.error("❌ Migration failed:", err);
+    // 2. Read migration files
+    const migrationsDir = path.join(__dirname, '../migrations');
+    const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
+
+    // 3. Get already executed migrations
+    const { rows } = await client.query('SELECT name FROM _migrations');
+    const executed = new Set(rows.map((r: any) => r.name));
+
+    // 4. Run new migrations in a transaction
+    for (const file of files) {
+      if (!executed.has(file)) {
+        console.log(`  ⌛ Running: ${file}...`);
+        const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+
+        await client.query('BEGIN');
+        try {
+          await client.query(sql);
+          await client.query('INSERT INTO _migrations (name) VALUES ($1)', [file]);
+          await client.query('COMMIT');
+          console.log(`  ✅ Success: ${file}`);
+        } catch (err) {
+          await client.query('ROLLBACK');
+          console.error(`  ❌ Failed: ${file}`);
+          throw err;
+        }
+      } else {
+        console.log(`  ⏭️  Skipping: ${file} (already executed)`);
+      }
+    }
+
+    console.log('✨ All migrations are up to date.');
+  } catch (error) {
+    console.error('Migration Runner Error:', error);
+    process.exit(1);
   } finally {
     await client.end();
   }
 }
 
-migrate();
+runMigrations();
