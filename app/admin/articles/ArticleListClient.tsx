@@ -1,14 +1,61 @@
 "use client";
 
-import { useState } from 'react';
-import { Globe, EyeOff, Clock, Edit3, Trash2, MoreVertical, Filter, Search } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Globe, EyeOff, Clock, Edit3, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { deleteArticle } from './actions';
+import { VirtualizedList } from '@/components/VirtualizedList';
 
-export default function ArticleListClient({ initialArticles }: { initialArticles: any[] }) {
-  const [articles, setArticles] = useState(initialArticles);
+interface Article {
+  id: string;
+  title_hindi: string;
+  slug: string;
+  status: string;
+  created_at: Date | string;
+  published_at: Date | string | null;
+}
+
+interface Props {
+  initialArticles: Article[];
+  initialCursor: string | null;
+  initialHasMore: boolean;
+}
+
+export default function ArticleListClient({ 
+  initialArticles, 
+  initialCursor, 
+  initialHasMore 
+}: Props) {
+  const [articles, setArticles] = useState<Article[]>(initialArticles);
+  const [cursor, setCursor] = useState<string | null>(initialCursor);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT'>('all');
 
+  // Load more articles
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+    
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (cursor) params.set('cursor', cursor);
+      params.set('limit', '20');
+
+      const res = await fetch(`/api/admin/articles?${params}`);
+      const result = await res.json();
+
+      setArticles(prev => [...prev, ...result.data]);
+      setCursor(result.meta.nextCursor);
+      setHasMore(result.meta.hasNextPage);
+    } catch (error) {
+      console.error('Failed to load more articles:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [cursor, hasMore, isLoading]);
+
+  // Filter based on active tab
   const filtered = activeTab === 'all' 
     ? articles 
     : articles.filter(a => a.status === activeTab);
@@ -22,13 +69,34 @@ export default function ArticleListClient({ initialArticles }: { initialArticles
     }
   };
 
+  // Render a single article row
+  const renderArticle = (article: Article) => (
+    <div key={article.id} className="flex items-center justify-between px-6 py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+      <div className="flex flex-col gap-1.5 flex-1">
+        <span className="font-hindi text-lg font-bold text-brand-navy">{article.title_hindi}</span>
+        <StatusBadge status={article.status} />
+      </div>
+      <div className="px-6 text-sm text-slate-400 font-medium min-w-[120px]">
+        {new Date(article.created_at).toLocaleDateString()}
+      </div>
+      <div className="flex items-center gap-2">
+        <Link href={`/admin/write?edit=${article.id}`} className="p-2 text-slate-400 hover:text-brand-gold">
+          <Edit3 size={18} />
+        </Link>
+        <button onClick={() => handleDelete(article.id)} className="p-2 text-slate-400 hover:text-red-500">
+          <Trash2 size={18} />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <>
       {/* Tabs */}
       <div className="px-8 py-6">
         <div className="flex items-center justify-between">
           <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
-            <button onClick={() => setActiveTab('all')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'all' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>All</button>
+            <button onClick={() => setActiveTab('all')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'all' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>All ({articles.length})</button>
             <button onClick={() => setActiveTab('PUBLISHED')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'PUBLISHED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Public</button>
             <button onClick={() => setActiveTab('UNLISTED')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'UNLISTED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Unlisted</button>
             <button onClick={() => setActiveTab('DRAFT')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'DRAFT' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Drafts</button>
@@ -36,43 +104,31 @@ export default function ArticleListClient({ initialArticles }: { initialArticles
         </div>
       </div>
 
-      {/* Table */}
-      <div className="flex-1 overflow-y-auto px-8 pb-12">
+      {/* Virtualized Article List */}
+      <div className="flex-1 px-8 pb-12">
         <div className="rounded-2xl border border-brand-navy/5 bg-white overflow-hidden shadow-sm">
-          <table className="w-full text-left">
-            <thead className="bg-brand-navy/5 text-[10px] font-black uppercase tracking-widest text-slate-500">
-              <tr>
-                <th className="px-6 py-4">Title & Status</th>
-                <th className="px-6 py-4">Date Created</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filtered.map((article) => (
-                <tr key={article.id} className="group hover:bg-slate-50 transition-colors">
-                  <td className="px-6 py-5">
-                    <div className="flex flex-col gap-1.5">
-                      <span className="font-hindi text-lg font-bold text-brand-navy">{article.title_hindi}</span>
-                      <StatusBadge status={article.status} />
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 text-sm text-slate-400 font-medium">
-                    {new Date(article.created_at).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-5 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Link href={`/admin/write?edit=${article.id}`} className="p-2 text-slate-400 hover:text-brand-gold">
-                        <Edit3 size={18} />
-                      </Link>
-                      <button onClick={() => handleDelete(article.id)} className="p-2 text-slate-400 hover:text-red-500">
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Header */}
+          <div className="flex items-center bg-brand-navy/5 text-[10px] font-black uppercase tracking-widest text-slate-500 px-6 py-4">
+            <div className="flex-1">Title & Status</div>
+            <div className="min-w-[120px] px-6">Date Created</div>
+            <div className="w-[100px] text-right">Actions</div>
+          </div>
+
+          {/* Virtualized List */}
+          <VirtualizedList
+            items={filtered}
+            renderItem={renderArticle}
+            estimatedItemHeight={80}
+            onLoadMore={loadMore}
+            hasNextPage={hasMore && activeTab === 'all'} // Only load more when viewing all
+            isLoading={isLoading}
+            className="h-[calc(100vh-300px)]"
+            emptyComponent={
+              <div className="p-12 text-center text-slate-400">
+                No articles found
+              </div>
+            }
+          />
         </div>
       </div>
     </>
@@ -80,12 +136,12 @@ export default function ArticleListClient({ initialArticles }: { initialArticles
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const configs: any = {
+  const configs: Record<string, { icon: React.ReactNode; label: string; styles: string }> = {
     PUBLISHED: { icon: <Globe size={10} />, label: 'Public', styles: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
     UNLISTED: { icon: <EyeOff size={10} />, label: 'Unlisted', styles: 'bg-sky-50 text-sky-700 border-sky-100' },
     DRAFT: { icon: <Clock size={10} />, label: 'Draft', styles: 'bg-slate-50 text-slate-600 border-slate-200' },
   };
-  const config = configs[status];
+  const config = configs[status] || configs.DRAFT;
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter ${config.styles}`}>
       {config.icon} {config.label}

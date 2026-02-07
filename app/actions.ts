@@ -2,28 +2,68 @@
 
 import { query } from "@/lib/db";
 
-// Fetch latest published posts for the homepage
-export async function getLatestPosts(limit: number = 10) {
-  const sql = `
-    SELECT 
-      title_hindi, 
-      content_hindi, 
-      slug, 
-      tags, 
-      published_at
-    FROM posts 
-    WHERE status = 'PUBLISHED'
-    ORDER BY published_at DESC
-    LIMIT $1;
-  `;
+// Post type for frontend
+export type Post = {
+  title: string;
+  excerpt: string;
+  date: string;
+  category: string;
+  slug: string;
+  publishedAt: string; // ISO string for cursor
+};
+
+// Pagination response type
+export type PaginatedPosts = {
+  posts: Post[];
+  hasMore: boolean;
+  nextCursor: string | null;
+};
+
+// Fetch latest published posts with cursor-based pagination
+export async function getLatestPosts(
+  limit: number = 10,
+  cursor?: string // ISO timestamp cursor
+): Promise<PaginatedPosts> {
+  // Fetch one extra to determine if there are more posts
+  const fetchLimit = limit + 1;
+  
+  const sql = cursor
+    ? `
+      SELECT 
+        title_hindi, 
+        content_hindi, 
+        slug, 
+        tags, 
+        published_at
+      FROM posts 
+      WHERE status = 'PUBLISHED' AND published_at < $2
+      ORDER BY published_at DESC
+      LIMIT $1;
+    `
+    : `
+      SELECT 
+        title_hindi, 
+        content_hindi, 
+        slug, 
+        tags, 
+        published_at
+      FROM posts 
+      WHERE status = 'PUBLISHED'
+      ORDER BY published_at DESC
+      LIMIT $1;
+    `;
 
   try {
-    const result = await query(sql, [limit]);
+    const params = cursor ? [fetchLimit, cursor] : [fetchLimit];
+    const result = await query(sql, params);
+    
+    // Check if there are more posts
+    const hasMore = result.rows.length > limit;
+    const rows = hasMore ? result.rows.slice(0, limit) : result.rows;
     
     // Transform data for the frontend
-    const posts = result.rows.map(row => ({
+    const posts: Post[] = rows.map(row => ({
       title: row.title_hindi,
-      // Create a plain text excerpt from HTML content
       excerpt: row.content_hindi
         ? row.content_hindi.replace(/<[^>]*>?/gm, '').substring(0, 150) + "..."
         : "",
@@ -33,13 +73,19 @@ export async function getLatestPosts(limit: number = 10) {
         day: 'numeric'
       }),
       category: row.tags && row.tags.length > 0 ? row.tags[0] : "General",
-      slug: row.slug
+      slug: row.slug,
+      publishedAt: new Date(row.published_at).toISOString()
     }));
 
-    return posts;
+    // Get next cursor from the last post
+    const nextCursor = hasMore && posts.length > 0
+      ? posts[posts.length - 1].publishedAt
+      : null;
+
+    return { posts, hasMore, nextCursor };
   } catch (error) {
     console.error("Error fetching latest posts:", error);
-    return [];
+    return { posts: [], hasMore: false, nextCursor: null };
   }
 }
 

@@ -1,16 +1,16 @@
-import { getAdminArticles } from "./data";
+import { getAdminArticlesPaginated } from "./data";
 import { isAdmin } from "@/lib/auth-utils";
 import ArticleListClient from "./ArticleListClient";
 import Link from "next/link";
-import { Plus, LayoutDashboard, FileText, Clock } from "lucide-react";
+import { Plus, LayoutDashboard, FileText } from "lucide-react";
 
 export default async function AdminArticlesPage() {
   // 1. Protection
   const authorized = await isAdmin();
   if (!authorized) return <div className="p-20 text-center">Unauthorized Access</div>;
 
-  // 2. Fetch real data
-  const initialArticles = await getAdminArticles();
+  // 2. Fetch first page of paginated data
+  const { data: initialArticles, meta } = await getAdminArticlesPaginated(null, 20);
 
   return (
     <div className="flex h-screen bg-brand-paper overflow-hidden">
@@ -39,8 +39,12 @@ export default async function AdminArticlesPage() {
           <h1 className="text-xl font-bold text-brand-navy uppercase tracking-tight font-display italic">Article Management</h1>
         </header>
 
-        {/* Pass data to the Client for filtering/interaction */}
-        <ArticleListClient initialArticles={initialArticles} />
+        {/* Pass paginated data to the Client */}
+        <ArticleListClient 
+          initialArticles={initialArticles} 
+          initialCursor={meta.nextCursor}
+          initialHasMore={meta.hasNextPage}
+        />
       </main>
     </div>
   );
