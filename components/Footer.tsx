@@ -16,7 +16,7 @@ export default function Footer() {
                   src="/logo_new.webp" 
                   alt="Acharya Rajesh Walia" 
                   fill
-                  className="object-cover"
+                  className="object-cover scale-140"
                   sizes="48px"
                 />
               </div>

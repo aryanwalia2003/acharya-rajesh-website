@@ -24,7 +24,7 @@ export default async function AdminArticlesPage() {
                 src="/logo_new.webp" 
                 alt="Logo" 
                 fill
-                className="object-cover"
+                className="object-cover scale-140"
                 sizes="32px"
               />
             </div>
