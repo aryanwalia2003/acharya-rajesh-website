@@ -2,6 +2,7 @@ import { getAdminArticlesPaginated } from "./data";
 import { isAdmin } from "@/lib/auth-utils";
 import ArticleListClient from "./ArticleListClient";
 import Link from "next/link";
+import Image from "next/image";
 import { Plus, LayoutDashboard, FileText } from "lucide-react";
 
 export default async function AdminArticlesPage() {
@@ -17,8 +18,16 @@ export default async function AdminArticlesPage() {
       {/* SIDEBAR */}
       <aside className="hidden w-64 flex-col border-r border-brand-navy/10 bg-white lg:flex">
         <div className="p-6 border-b border-brand-navy/5">
-          <Link href="/" className="flex items-center gap-2 text-brand-navy font-bold">
-            <LayoutDashboard size={20} className="text-brand-gold" />
+          <Link href="/" className="flex items-center gap-3 text-brand-navy font-bold group">
+            <div className="relative w-8 h-8 overflow-hidden rounded-full border border-brand-gold">
+              <Image 
+                src="/logo_new.webp" 
+                alt="Logo" 
+                fill
+                className="object-cover"
+                sizes="32px"
+              />
+            </div>
             Admin Dashboard
           </Link>
         </div>

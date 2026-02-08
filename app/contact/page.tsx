@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { MessageSquare, MapPin, Phone, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { submitInquiry } from "./actions";
 
@@ -207,6 +208,8 @@ export default function ContactPage() {
 
         </div>
       </main>
+      
+      <Footer />
     </div>
   );
 }

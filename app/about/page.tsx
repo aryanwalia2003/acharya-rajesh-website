@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { MapPin, Phone, Mail } from 'lucide-react';
 
 export default function AboutPage() {
@@ -73,11 +74,7 @@ export default function AboutPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-brand-navy/5 py-12 text-center">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          © {new Date().getFullYear()} Acharya Rajesh Walia. All Wisdom Reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

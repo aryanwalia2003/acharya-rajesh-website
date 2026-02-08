@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sparkles, ShieldCheck, Mail } from 'lucide-react';
 import { signIn } from "@/lib/auth";
-
 
 export default function LoginPage() {
   return (
@@ -14,8 +14,14 @@ export default function LoginPage() {
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-12">
         {/* Branding Area */}
         <div className="mb-12 flex flex-col items-center text-center">
-          <div className="mb-6 rounded-full bg-brand-navy p-4 text-brand-gold shadow-xl">
-            <Sparkles size={48} fill="currentColor" />
+          <div className="mb-6 relative w-24 h-24 overflow-hidden rounded-full border-4 border-brand-gold shadow-xl">
+            <Image 
+              src="/logo_new.webp" 
+              alt="Acharya Rajesh Walia" 
+              fill
+              className="object-cover"
+              sizes="96px"
+            />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-brand-navy md:text-4xl">
             ACHARYA RAJESH

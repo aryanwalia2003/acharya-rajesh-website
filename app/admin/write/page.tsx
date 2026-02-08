@@ -11,6 +11,7 @@ import {
   Type, Settings, Info, Heading2
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AdminWritePage() {
   return (
@@ -229,8 +230,16 @@ function EditorComponent() {
       {/* LEFT SIDEBAR (Library) */}
       <aside className="hidden w-64 flex-col border-r border-brand-navy/10 bg-white lg:flex">
         <div className="p-6 border-b border-brand-navy/5">
-          <Link href="/" className="flex items-center gap-2 text-brand-navy font-bold">
-            <LayoutDashboard size={20} className="text-brand-gold" />
+          <Link href="/" className="flex items-center gap-3 text-brand-navy font-bold group">
+            <div className="relative w-8 h-8 overflow-hidden rounded-full border border-brand-gold">
+               <Image 
+                src="/logo_new.webp" 
+                alt="Logo" 
+                fill
+                className="object-cover"
+                sizes="32px"
+              />
+            </div>
             Admin Dashboard
           </Link>
         </div>
