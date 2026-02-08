@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { MessageSquare, MapPin, Phone, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { MessageSquare, MapPin, Phone, Clock, Send, CheckCircle, AlertCircle, Instagram } from 'lucide-react';
 import { submitInquiry } from "./actions";
 
 export default function ContactPage() {
@@ -19,6 +19,7 @@ export default function ContactPage() {
     e.preventDefault();
     setStatus('submitting');
     
+    // ... (rest of logic)
     const data = new FormData();
     data.append("name", formData.name);
     data.append("phone", formData.phone);
@@ -79,6 +80,17 @@ export default function ContactPage() {
                   Chat on WhatsApp
                 </a>
 
+                {/* Instagram Button (New) */}
+                <a 
+                  href="https://www.instagram.com/acharyarajesh_in?igsh=MThxazgwcXk2NWtpYw==" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white font-bold py-4 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98]"
+                >
+                  <Instagram size={24} strokeWidth={2.5} />
+                  Follow on Instagram
+                </a>
+
                 <div className="flex items-center gap-4 p-4 bg-brand-paper/50 rounded-xl">
                   <div className="bg-white p-3 rounded-full text-brand-navy shadow-sm">
                     <Phone size={20} />
@@ -90,6 +102,20 @@ export default function ContactPage() {
                       <span className="hidden sm:inline text-slate-300">|</span>
                       <a href="tel:+917982803848" className="hover:text-brand-gold transition-colors">7982803848</a>
                     </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-4 bg-brand-paper/50 rounded-xl">
+                  <div className="bg-white p-3 rounded-full text-brand-navy shadow-sm">
+                    <Send size={20} />
+                  </div>
+                   <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Email Us</p>
+                    <p className="font-bold text-brand-navy">
+                      <a href="mailto:acharyarajesh@gmail.com" className="hover:text-brand-gold transition-colors">
+                        acharyarajesh@gmail.com
+                      </a>
+                    </p>
                   </div>
                 </div>
 

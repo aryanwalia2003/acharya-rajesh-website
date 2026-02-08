@@ -51,12 +51,21 @@ function EditorComponent() {
   const [extractedDates, setExtractedDates] = useState<any[]>([]);
   const [activeAiTask, setActiveAiTask] = useState<string | null>(null);
   
+  // Sidebar Stats
+  const [draftCount, setDraftCount] = useState(0);
+  
   const editorRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLTextAreaElement>(null);
 
   // 1. LOAD INITIAL DATA (New or Edit)
   useEffect(() => {
     const init = async () => {
+      // Fetch draft count
+      import('./actions').then(async ({ getDraftCount }) => {
+        const count = await getDraftCount();
+        setDraftCount(count);
+      });
+
       if (editId) {
         // Mode: EDITING
         const post = await getPostForEditing(editId);
@@ -117,6 +126,11 @@ function EditorComponent() {
       if (result.success) {
           setSaveStatus('saved');
           setLastSavedAt(new Date());
+          // Refresh draft count on save
+           import('./actions').then(async ({ getDraftCount }) => {
+            const count = await getDraftCount();
+            setDraftCount(count);
+          });
       }
       else setSaveStatus('error');
     }, 2000);
@@ -248,9 +262,12 @@ function EditorComponent() {
           <button className="flex w-full items-center gap-3 rounded-lg bg-brand-navy/5 px-3 py-2 text-sm font-bold text-brand-navy text-left">
             <FileText size={18} /> New Article
           </button>
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-brand-navy/5 transition-colors text-left text-brand-gold">
-            <Clock size={18} /> Drafts (4)
-          </button>
+          <Link 
+            href="/admin/articles?status=DRAFT"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-brand-navy/5 transition-colors text-left hover:text-brand-navy"
+          >
+            <Clock size={18} /> Drafts ({draftCount})
+          </Link>
         </nav>
         <div className="p-4 border-t border-brand-navy/5">
            <button 

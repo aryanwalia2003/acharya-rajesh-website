@@ -225,3 +225,18 @@ export async function republishArticle(id: string) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Action: Get Draft Count
+ */
+export async function getDraftCount() {
+  if (!(await isAdmin())) return 0;
+
+  try {
+    const result = await query(`SELECT COUNT(*) as count FROM posts WHERE status = 'DRAFT'`);
+    return result.rows[0].count;
+  } catch (error) {
+    console.error("Failed to fetch draft count:", error);
+    return 0;
+  }
+}

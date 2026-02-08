@@ -35,7 +35,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-widest text-brand-navy/70">
-          <Link href="/articles" className="hover:text-brand-gold transition-colors">Journal</Link>
+          <Link href="/journal" className="hover:text-brand-gold transition-colors">Journal</Link>
           <Link href="/about" className="hover:text-brand-gold transition-colors">About</Link>
           <Link href="/contact" className="hover:text-brand-gold transition-colors">Contact</Link>
         </nav>
@@ -62,7 +62,7 @@ export default function Navbar() {
         <div className="md:hidden absolute top-full left-0 w-full bg-brand-paper border-b border-brand-navy/10 shadow-xl py-6 px-6 flex flex-col gap-6 animate-fade-in-down">
           <nav className="flex flex-col gap-4 text-sm font-bold uppercase tracking-widest text-brand-navy/70 text-center">
             <Link 
-              href="/articles" 
+              href="/journal" 
               className="hover:text-brand-gold transition-colors py-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >

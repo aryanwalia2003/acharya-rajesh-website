@@ -5,13 +5,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, LayoutDashboard, FileText } from "lucide-react";
 
-export default async function AdminArticlesPage() {
+// Force dynamic rendering to ensure searchParams are processed correctly
+export const dynamic = 'force-dynamic';
+
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function AdminArticlesPage({ searchParams }: PageProps) {
   // 1. Protection
   const authorized = await isAdmin();
   if (!authorized) return <div className="p-20 text-center">Unauthorized Access</div>;
 
+  const resolvedParams = await searchParams;
+  const status = (resolvedParams.status as 'PUBLISHED' | 'UNLISTED' | 'DRAFT') || null;
+  console.log('AdminArticlesPage searchParams:', resolvedParams, 'Resolved Status:', status);
+
   // 2. Fetch first page of paginated data
-  const { data: initialArticles, meta } = await getAdminArticlesPaginated(null, 20);
+  const { data: initialArticles, meta } = await getAdminArticlesPaginated(null, 20, status);
 
   return (
     <div className="flex h-screen bg-brand-paper overflow-hidden">

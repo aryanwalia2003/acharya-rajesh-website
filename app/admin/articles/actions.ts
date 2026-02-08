@@ -14,6 +14,7 @@ export async function deleteArticle(id: string) {
 }
 
 // Admin fuzzy search with status filtering
+
 export async function searchAdminArticles(
   searchQuery: string,
   statusFilter: 'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT' = 'all',
@@ -25,27 +26,32 @@ export async function searchAdminArticles(
     return [];
   }
 
-  const statusClause = statusFilter === 'all' 
-    ? '' 
-    : `AND status = '${statusFilter}'`;
-
-  const sql = `
+  // Base query
+  let sql = `
     SELECT 
       id,
-      title_hindi, 
+      COALESCE(draft_title, title_hindi) as title_hindi, 
       slug, 
       status,
       created_at,
-      published_at,
-      similarity(title_hindi, $1) as score
+      published_at
     FROM posts 
-    WHERE title_hindi % $1 ${statusClause}
-    ORDER BY score DESC
-    LIMIT $2;
+    WHERE (title_hindi ILIKE $1 OR draft_title ILIKE $1)
   `;
 
+  const params: any[] = [`%${searchQuery}%`];
+
+  // Append status filter if needed
+  if (statusFilter !== 'all') {
+    sql += ` AND status = $${params.length + 1}`;
+    params.push(statusFilter);
+  }
+
+  sql += ` ORDER BY created_at DESC LIMIT $${params.length + 1}`;
+  params.push(limit);
+
   try {
-    const result = await query(sql, [searchQuery, limit]);
+    const result = await query(sql, params);
     return result.rows;
   } catch (error) {
     console.error("Error searching admin articles:", error);

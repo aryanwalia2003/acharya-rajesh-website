@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
   const cursor = searchParams.get('cursor');
   const limit = parseInt(searchParams.get('limit') || '20');
 
-  const result = await getAdminArticlesPaginated(cursor, limit);
+  const status = searchParams.get('status') as 'PUBLISHED' | 'UNLISTED' | 'DRAFT' | null;
+
+  const result = await getAdminArticlesPaginated(cursor, limit, status);
 
   return NextResponse.json(result);
 }

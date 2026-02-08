@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { Sparkles, Facebook, Instagram, Twitter } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -39,7 +39,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xs font-bold uppercase tracking-widest text-brand-navy mb-6">Explore</h3>
             <ul className="space-y-4 text-sm text-brand-ink/70 font-medium">
-              <li><Link href="/" className="hover:text-brand-gold transition-colors">Journal</Link></li>
+              <li><Link href="/journal" className="hover:text-brand-gold transition-colors">Journal</Link></li>
               <li><Link href="/about" className="hover:text-brand-gold transition-colors">About Acharya Ji</Link></li>
               <li><Link href="/contact" className="hover:text-brand-gold transition-colors">Contact</Link></li>
               <li><Link href="/book" className="hover:text-brand-gold transition-colors">Book Consultation</Link></li>
@@ -56,14 +56,13 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:contact@acharyarajesh.com" className="hover:text-brand-gold transition-colors">
-                  contact@acharyarajesh.com
+                <a href="mailto:acharyarajesh@gmail.com" className="hover:text-brand-gold transition-colors">
+                  acharyarajesh@gmail.com
                 </a>
               </li>
               <li className="flex gap-4 pt-2">
                 <a href="#" className="text-slate-400 hover:text-brand-gold transition-colors"><Facebook size={20} /></a>
-                <a href="#" className="text-slate-400 hover:text-brand-gold transition-colors"><Instagram size={20} /></a>
-                <a href="#" className="text-slate-400 hover:text-brand-gold transition-colors"><Youtube size={20} /></a>
+                <a href="https://www.instagram.com/acharyarajesh_in?igsh=MThxazgwcXk2NWtpYw==" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-brand-gold transition-colors"><Instagram size={20} /></a>
               </li>
             </ul>
           </div>

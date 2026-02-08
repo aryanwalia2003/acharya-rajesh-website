@@ -28,14 +28,28 @@ export async function getAdminArticles() {
   return result.rows;
 }
 
-// New - Cursor-based pagination
-export async function getAdminArticlesPaginated(cursor: string | null = null, limit: number = 20) {
+// New - Cursor-based pagination with optional Status Filter
+export async function getAdminArticlesPaginated(
+  cursor: string | null = null, 
+  limit: number = 20,
+  status: 'PUBLISHED' | 'UNLISTED' | 'DRAFT' | null = null
+) {
+  let whereClause = "";
+  let params: any[] = [];
+
+  if (status) {
+    whereClause = "status = $1";
+    params = [status];
+  }
+
+  console.log('Fetching articles with status:', status, 'Where Clause:', whereClause);
+
   return getPaginatedData<Article>(
     'posts',
     cursor,
     limit,
-    ['id::text as id', 'title_hindi', 'slug', 'status', 'created_at', 'published_at'],
-    '', // No WHERE clause - admin sees all
-    []
+    ['id::text as id', 'COALESCE(draft_title, title_hindi) as title_hindi', 'slug', 'status', 'created_at', 'published_at'],
+    whereClause,
+    params
   );
 }

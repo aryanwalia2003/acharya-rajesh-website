@@ -7,6 +7,8 @@ import { unlistArticle, republishArticle } from '@/app/admin/write/actions';
 import { searchAdminArticles } from './actions';
 import { VirtualizedList } from '@/components/VirtualizedList';
 
+import { useSearchParams, useRouter } from 'next/navigation';
+
 interface Article {
   id: string;
   title_hindi: string;
@@ -27,12 +29,24 @@ export default function ArticleListClient({
   initialCursor, 
   initialHasMore 
 }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialStatus = searchParams.get('status') as 'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT' | null;
+  
   const [articles, setArticles] = useState<Article[]>(initialArticles);
   const [cursor, setCursor] = useState<string | null>(initialCursor);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT'>(initialStatus || 'all');
   
+  // Sync state with props when URL changes
+  useEffect(() => {
+    setArticles(initialArticles);
+    setCursor(initialCursor);
+    setHasMore(initialHasMore);
+    setActiveTab(initialStatus || 'all');
+  }, [initialArticles, initialCursor, initialHasMore, initialStatus]);
+
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Article[] | null>(null);
@@ -83,6 +97,7 @@ export default function ArticleListClient({
       const params = new URLSearchParams();
       if (cursor) params.set('cursor', cursor);
       params.set('limit', '20');
+      if (activeTab !== 'all') params.set('status', activeTab);
 
       const res = await fetch(`/api/admin/articles?${params}`);
       const result = await res.json();
@@ -95,12 +110,13 @@ export default function ArticleListClient({
     } finally {
       setIsLoading(false);
     }
-  }, [cursor, hasMore, isLoading]);
+  }, [cursor, hasMore, isLoading, activeTab]);
 
-  // Filter based on active tab
-  const filtered = activeTab === 'all' 
-    ? articles 
-    : articles.filter(a => a.status === activeTab);
+  const handleTabChange = (tab: 'all' | 'PUBLISHED' | 'UNLISTED' | 'DRAFT') => {
+    clearSearch();
+    if (tab === 'all') router.push('/admin/articles');
+    else router.push(`/admin/articles?status=${tab}`);
+  };
 
   const handleToggleStatus = async (id: string, currentStatus: string) => {
     if (currentStatus === 'PUBLISHED') {
@@ -164,10 +180,10 @@ export default function ArticleListClient({
       <div className="px-8 py-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
-            <button onClick={() => { setActiveTab('all'); clearSearch(); }} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'all' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>All ({articles.length})</button>
-            <button onClick={() => { setActiveTab('PUBLISHED'); clearSearch(); }} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'PUBLISHED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Public</button>
-            <button onClick={() => { setActiveTab('UNLISTED'); clearSearch(); }} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'UNLISTED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Unlisted</button>
-            <button onClick={() => { setActiveTab('DRAFT'); clearSearch(); }} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'DRAFT' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Drafts</button>
+            <button onClick={() => handleTabChange('all')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'all' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>All</button>
+            <button onClick={() => handleTabChange('PUBLISHED')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'PUBLISHED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Public</button>
+            <button onClick={() => handleTabChange('UNLISTED')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'UNLISTED' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Unlisted</button>
+            <button onClick={() => handleTabChange('DRAFT')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-lg transition-all ${activeTab === 'DRAFT' ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-400'}`}>Drafts</button>
           </div>
 
           {/* Search Input */}
@@ -206,11 +222,11 @@ export default function ArticleListClient({
 
           {/* Virtualized List - use search results if searching */}
           <VirtualizedList
-            items={searchResults !== null ? searchResults : filtered}
+            items={searchResults !== null ? searchResults : articles}
             renderItem={renderArticle}
             estimatedItemHeight={80}
             onLoadMore={loadMore}
-            hasNextPage={searchResults === null && hasMore && activeTab === 'all'}
+            hasNextPage={searchResults === null && hasMore}
             isLoading={isLoading}
             className="h-[calc(100vh-300px)]"
             emptyComponent={
