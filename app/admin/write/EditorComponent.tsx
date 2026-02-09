@@ -18,6 +18,12 @@ export default function EditorComponent() {
   const router = useRouter();
   const editId = searchParams.get('edit');
 
+  // Generate clean slug from ID (not Hindi title)
+  const generateSlug = (id: string) => {
+    const timestamp = Date.now().toString(36); // Base36 for shorter string
+    return `article-${id.slice(-8)}-${timestamp}`;
+  };
+
   const [postId, setPostId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Tracks plain text/HTML for logic
@@ -106,7 +112,7 @@ export default function EditorComponent() {
         id: postId,
         title: title,
         content: editorRef.current?.innerHTML || "",
-        slug: title.toLowerCase().trim().replace(/\s+/g, '-').slice(0, 50),
+        slug: postId ? generateSlug(postId) : 'draft',
         tags: tags,
         intent: 'DRAFT',
         // Include AI content if available
@@ -186,7 +192,7 @@ export default function EditorComponent() {
       id: postId, 
       title: title,
       content: editorRef.current.innerHTML,
-      slug: title.toLowerCase().trim().replace(/\s+/g, '-').slice(0, 50), 
+      slug: postId ? generateSlug(postId) : 'draft', 
       tags: tags,
       intent: 'PUBLISH',
       // Include AI content

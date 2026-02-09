@@ -5,7 +5,7 @@ import BlogFeed from '@/components/BlogFeed';
 import { getLatestPosts } from '../actions';
 
 export const metadata = {
-  title: 'Journal | Acharya Rajesh Walia',
+  title: 'Journal | Acharya Rajesh ',
   description: 'Explore the complete collection of Vedic Astrology articles, daily horoscopes, and spiritual insights.',
 };
 

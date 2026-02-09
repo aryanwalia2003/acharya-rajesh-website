@@ -54,7 +54,7 @@ export default function ContactPage() {
             संपर्क करें (Contact Us)
           </h1>
           <p className="text-brand-ink/70 max-w-2xl mx-auto">
-            Get in touch for consultations, inquiries, or to book an appointment with Acharya Rajesh Walia.
+            Get in touch for consultations, inquiries, or to book an appointment with Acharya Rajesh .
           </p>
         </div>
 

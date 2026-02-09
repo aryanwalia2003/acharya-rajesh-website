@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Acharya Rajesh Walia',
+  title: 'Terms of Service | Acharya Rajesh ',
   description: 'Terms and conditions for using our website and services.',
 };
 
@@ -25,12 +25,12 @@ export default function TermsOfService() {
           
           <h3>1. Acceptance of Terms</h3>
           <p>
-            By accessing or using the website of <strong>Acharya Rajesh Walia</strong>, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.
+            By accessing or using the website of <strong>Acharya Rajesh </strong>, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.
           </p>
 
           <h3>2. Astrology Services Disclaimer</h3>
           <p>
-            <strong>For Entertainment & Guidance Purposes Only:</strong> Astrology is an ancient science of guidance. While Acharya Rajesh Walia strives to provide accurate and helpful predictions based on Vedic principles, these should not be considered as a substitute for professional legal, medical, or financial advice. We do not guarantee specific results. Your life choices and actions (Karma) play a significant role in your future.
+            <strong>For Entertainment & Guidance Purposes Only:</strong> Astrology is an ancient science of guidance. While Acharya Rajesh  strives to provide accurate and helpful predictions based on Vedic principles, these should not be considered as a substitute for professional legal, medical, or financial advice. We do not guarantee specific results. Your life choices and actions (Karma) play a significant role in your future.
           </p>
 
           <h3>3. Consultations & Payments</h3>
@@ -47,12 +47,12 @@ export default function TermsOfService() {
 
           <h3>5. Intellectual Property</h3>
           <p>
-            The content, features, blog posts, logos, and design on this website are the exclusive property of Acharya Rajesh Walia. Unauthorized reproduction is prohibited.
+            The content, features, blog posts, logos, and design on this website are the exclusive property of Acharya Rajesh . Unauthorized reproduction is prohibited.
           </p>
 
           <h3>6. Limitation of Liability</h3>
           <p>
-            In no event shall Acharya Rajesh Walia be liable for any indirect, incidental, special, or consequential damages resulting from your use of the website or reliance on any information provided herein.
+            In no event shall Acharya Rajesh  be liable for any indirect, incidental, special, or consequential damages resulting from your use of the website or reliance on any information provided herein.
           </p>
 
           <h3>7. Changes to Terms</h3>

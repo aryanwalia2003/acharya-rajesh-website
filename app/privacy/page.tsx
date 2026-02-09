@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Acharya Rajesh Walia',
+  title: 'Privacy Policy | Acharya Rajesh ',
   description: 'Privacy Policy and Data Collection practices.',
 };
 
@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
 
         <div className="prose prose-slate max-w-none prose-headings:font-display prose-headings:text-brand-navy prose-a:text-brand-gold prose-strong:text-brand-navy">
           <p>
-            Welcome to the official website of <strong>Acharya Rajesh Walia</strong>. We respect your privacy and are committed to protecting personally identifiable information you may provide us through the Website.
+            Welcome to the official website of <strong>Acharya Rajesh </strong>. We respect your privacy and are committed to protecting personally identifiable information you may provide us through the Website.
           </p>
 
           <h3>1. Information We Collect</h3>

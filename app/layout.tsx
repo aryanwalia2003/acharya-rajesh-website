@@ -16,7 +16,7 @@ const martel = Martel({
 });
 
 export const metadata: Metadata = {
-  title: "Acharya Rajesh Walia | Vedic Astrologer",
+  title: "Acharya Rajesh  | Vedic Astrologer",
   description: "Scholarly Vedic Astrology Journal and Consultations",
 };
 

@@ -14,7 +14,7 @@ export default function Footer() {
               <div className="relative w-12 h-12 overflow-hidden rounded-full border-2 border-brand-gold shadow-sm transition-transform duration-500 group-hover:rotate-6">
                 <Image 
                   src="/logo_new.webp" 
-                  alt="Acharya Rajesh Walia" 
+                  alt="Acharya Rajesh " 
                   fill
                   className="object-cover scale-140"
                   sizes="48px"
@@ -70,7 +70,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-brand-navy/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center md:text-left">
-          <p>© {new Date().getFullYear()} Acharya Rajesh Walia. All Wisdom Reserved.</p>
+          <p>© {new Date().getFullYear()} Acharya Rajesh . All Wisdom Reserved.</p>
           <div className="flex gap-6">
             <Link href="/privacy" className="hover:text-brand-navy transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-brand-navy transition-colors">Terms of Service</Link>

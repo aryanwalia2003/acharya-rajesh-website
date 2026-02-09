@@ -1,7 +1,7 @@
-# Project Vision: Acharya Rajesh Walia – Vedic Astrology Platform
+# Project Vision: Acharya Rajesh  – Vedic Astrology Platform
 
 ## 1. Brand Identity
-- **Principal:** Acharya Rajesh Walia
+- **Principal:** Acharya Rajesh 
 - **Title:** Vedic Astrologer
 - **Core Value:** Scholarly, authoritative, and traditional Vedic wisdom delivered through modern technology.
 - **Primary Language:** Hindi (Long-form blogs).

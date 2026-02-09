@@ -17,7 +17,7 @@ export default function LoginPage() {
           <div className="mb-6 relative w-24 h-24 overflow-hidden rounded-full border-4 border-brand-gold shadow-xl">
             <Image 
               src="/logo_new.webp" 
-              alt="Acharya Rajesh Walia" 
+              alt="Acharya Rajesh " 
               fill
               className="object-cover scale-140"
               sizes="96px"
@@ -87,7 +87,7 @@ export default function LoginPage() {
       </main>
 
       <footer className="py-8 text-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
-        © 2024 Acharya Rajesh Walia • Secure Astrology Platform
+        © 2024 Acharya Rajesh  • Secure Astrology Platform
       </footer>
     </div>
   );
