@@ -1,5 +1,6 @@
 import { getAdminArticlesPaginated } from "./data";
 import { isAdmin } from "@/lib/auth-utils";
+import { redirect } from 'next/navigation';
 import ArticleListClient from "./ArticleListClient";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +16,9 @@ interface PageProps {
 export default async function AdminArticlesPage({ searchParams }: PageProps) {
   // 1. Protection
   const authorized = await isAdmin();
-  if (!authorized) return <div className="p-20 text-center">Unauthorized Access</div>;
+  if (!authorized) {
+    redirect('/login?error=unauthorized');
+  }
 
   const resolvedParams = await searchParams;
   const status = (resolvedParams.status as 'PUBLISHED' | 'UNLISTED' | 'DRAFT') || null;
