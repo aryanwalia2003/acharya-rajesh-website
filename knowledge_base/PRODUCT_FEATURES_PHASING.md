@@ -14,7 +14,7 @@
 ## Phase 2: Conversions (Booking)
 ### A. The Appointment Engine
 - **Calendar Logic:** Integration with a scheduling system.
-- **Timezone Management:** Crucial for Vedic astrology (IST vs. User Local Time).
+- **Timezone Management:** Crucial for  astrology (IST vs. User Local Time).
 - **Buffer Times:** 15-minute gaps between consultations.
 
 ### B. CTA Integration

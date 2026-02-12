@@ -9,7 +9,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:migrate": "tsx scripts/migrate.ts"
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:migrate:local": "dotenv -e .env -- tsx scripts/migrate.ts",
+    "db:migrate:remote": "dotenv -e .env.prod -- tsx scripts/migrate.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

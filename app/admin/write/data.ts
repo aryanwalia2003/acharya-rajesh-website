@@ -14,7 +14,8 @@ export async function getPostForEditing(id: string) {
       COALESCE(draft_content, content_hindi) as content_hindi, 
       slug, 
       tags, 
-      status 
+      status,
+      category 
     FROM posts 
     WHERE id = $1 
     LIMIT 1

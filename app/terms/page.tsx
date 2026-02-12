@@ -30,7 +30,7 @@ export default function TermsOfService() {
 
           <h3>2. Astrology Services Disclaimer</h3>
           <p>
-            <strong>For Entertainment & Guidance Purposes Only:</strong> Astrology is an ancient science of guidance. While Acharya Rajesh  strives to provide accurate and helpful predictions based on Vedic principles, these should not be considered as a substitute for professional legal, medical, or financial advice. We do not guarantee specific results. Your life choices and actions (Karma) play a significant role in your future.
+            <strong>For Entertainment & Guidance Purposes Only:</strong> Astrology is an ancient science of guidance. While Acharya Rajesh  strives to provide accurate and helpful predictions based on  principles, these should not be considered as a substitute for professional legal, medical, or financial advice. We do not guarantee specific results. Your life choices and actions (Karma) play a significant role in your future.
           </p>
 
           <h3>3. Consultations & Payments</h3>

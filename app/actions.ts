@@ -22,39 +22,40 @@ export type PaginatedPosts = {
 // Fetch latest published posts with cursor-based pagination
 export async function getLatestPosts(
   limit: number = 10,
-  cursor?: string // ISO timestamp cursor
+  cursor?: string, // ISO timestamp cursor
+  category?: string
 ): Promise<PaginatedPosts> {
   // Fetch one extra to determine if there are more posts
   const fetchLimit = limit + 1;
+  const params: any[] = [fetchLimit];
+
+  let whereClause = "WHERE status = 'PUBLISHED'";
   
-  const sql = cursor
-    ? `
+  if (category && category !== 'All') {
+    whereClause += ` AND category = $${params.length + 1}`;
+    params.push(category);
+  }
+
+  if (cursor) {
+    whereClause += ` AND published_at < $${params.length + 1}`;
+    params.push(cursor);
+  }
+  
+  const sql = `
       SELECT 
         title_hindi, 
         content_hindi, 
         slug, 
         tags, 
-        published_at
+        published_at,
+        category
       FROM posts 
-      WHERE status = 'PUBLISHED' AND published_at < $2
-      ORDER BY published_at DESC
-      LIMIT $1;
-    `
-    : `
-      SELECT 
-        title_hindi, 
-        content_hindi, 
-        slug, 
-        tags, 
-        published_at
-      FROM posts 
-      WHERE status = 'PUBLISHED'
+      ${whereClause}
       ORDER BY published_at DESC
       LIMIT $1;
     `;
 
   try {
-    const params = cursor ? [fetchLimit, cursor] : [fetchLimit];
     const result = await query(sql, params);
     
     // Check if there are more posts
@@ -72,7 +73,7 @@ export async function getLatestPosts(
         month: 'long',
         day: 'numeric'
       }),
-      category: row.tags && row.tags.length > 0 ? row.tags[0] : "General",
+      category: row.category || "Misceleneous",
       slug: row.slug,
       publishedAt: new Date(row.published_at).toISOString()
     }));
@@ -99,7 +100,8 @@ export async function getPostBySlug(slug: string) {
       published_at,
       english_translation,
       english_summary,
-      important_dates
+      important_dates,
+      category
     FROM posts 
     WHERE slug = $1 AND status = 'PUBLISHED'
     LIMIT 1;
@@ -119,7 +121,7 @@ export async function getPostBySlug(slug: string) {
         month: 'long',
         day: 'numeric'
       }),
-      category: row.tags && row.tags.length > 0 ? row.tags[0] : "General",
+      category: row.category || "Misceleneous",
       slug: row.slug,
       // AI-Generated Content
       englishTranslation: row.english_translation || null,
@@ -148,6 +150,7 @@ export async function searchPosts(
       slug, 
       tags, 
       published_at,
+      category,
       similarity(title_hindi, $1) as score
     FROM posts 
     WHERE status = 'PUBLISHED' 
@@ -169,7 +172,7 @@ export async function searchPosts(
         month: 'long',
         day: 'numeric'
       }),
-      category: row.tags && row.tags.length > 0 ? row.tags[0] : "General",
+      category: row.category || "Misceleneous",
       slug: row.slug,
       publishedAt: new Date(row.published_at).toISOString()
     }));

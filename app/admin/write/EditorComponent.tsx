@@ -42,6 +42,7 @@ export default function EditorComponent() {
   const [stats, setStats] = useState({ words: 0, readTime: 0 });
   const [isPublishing, setIsPublishing] = useState(false);
   const [postStatus, setPostStatus] = useState<'DRAFT' | 'PUBLISHED'>('DRAFT');
+  const [category, setCategory] = useState<'Astrology' | 'Panchang' | 'Festivals' | 'Misceleneous'>('Misceleneous');
 
   // AI Task States
   const [englishTranslation, setEnglishTranslation] = useState("");
@@ -72,7 +73,9 @@ export default function EditorComponent() {
           setTitle(post.title_hindi);
           setTags(post.tags || []);
           setContent(post.content_hindi);
+          setContent(post.content_hindi);
           setPostStatus(post.status || 'DRAFT');
+          setCategory(post.category || 'Misceleneous');
           
           // Wait for DOM to be ready, then set content
           setTimeout(() => {
@@ -115,6 +118,7 @@ export default function EditorComponent() {
         slug: postId ? generateSlug(postId) : 'draft',
         tags: tags,
         intent: 'DRAFT',
+        category: category,
         // Include AI content if available
         english_translation: englishTranslation,
         english_summary: englishSummary,
@@ -134,7 +138,7 @@ export default function EditorComponent() {
     }, 2000);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [title, content, tags, isLoaded, postId, englishTranslation, englishSummary, extractedDates]);
+  }, [title, content, tags, isLoaded, postId, englishTranslation, englishSummary, extractedDates, category]);
 
   // Check current selection formatting
   const checkFormats = () => {
@@ -186,6 +190,11 @@ export default function EditorComponent() {
   const handlePublish = async () => {
     if (!title || !editorRef.current || !postId) return;
 
+    // VALIDATION: Category Check
+    if (category === 'Misceleneous' && !confirm("You are publishing under 'Misceleneous'. Are you sure?")) {
+        return;
+    }
+
     setIsPublishing(true);
     
     const result = await upsertArticle({
@@ -195,6 +204,7 @@ export default function EditorComponent() {
       slug: postId ? generateSlug(postId) : 'draft', 
       tags: tags,
       intent: 'PUBLISH',
+      category: category,
       // Include AI content
       english_translation: englishTranslation,
       english_summary: englishSummary,
@@ -274,6 +284,15 @@ export default function EditorComponent() {
            >
             <Settings size={18} /> SEO & Settings
           </button>
+          
+          {showSettings && (
+            <div className="mt-4 p-3 bg-brand-navy/5 rounded-lg space-y-3 animate-in fade-in slide-in-from-top-2">
+              <div className="space-y-1">
+               {/* Metadata settings can go here */}
+                <p className="text-[10px] text-slate-400">SEO Settings Coming Soon...</p>
+              </div>
+            </div>
+          )}
         </div>
       </aside>
       
@@ -303,7 +322,21 @@ export default function EditorComponent() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
+             <div className="hidden md:block">
+                <select 
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as any)}
+                  className="rounded-lg border-brand-navy/10 bg-brand-navy/5 py-2 px-3 text-xs font-bold uppercase tracking-wide text-brand-navy focus:border-brand-gold focus:ring-brand-gold"
+                >
+                  <option value="Misceleneous">Select Category</option>
+                  <option value="Astrology">Astrology</option>
+                  <option value="Panchang">Panchang</option>
+                  <option value="Festivals">Festivals</option>
+                  <option value="Misceleneous">Misceleneous</option>
+              </select>
+             </div>
+
             <button className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-widest text-brand-navy hover:bg-brand-navy/5">
               <Eye size={16} /> Preview
             </button>

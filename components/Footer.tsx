@@ -25,12 +25,12 @@ export default function Footer() {
                   ACHARYA RAJESH
                 </h2>
                 <span className="text-[10px] uppercase tracking-[0.2em] text-brand-gold font-bold">
-                  Vedic Astrologer
+                   Astrologer
                 </span>
               </div>
             </Link>
             <p className="text-brand-ink/70 text-sm leading-relaxed max-w-sm">
-              Helping you navigate life's journey through the ancient wisdom of Vedic Astrology. 
+              Helping you navigate life's journey through the ancient wisdom of  Astrology. 
               Karma and Destiny, aligned.
             </p>
           </div>

@@ -27,7 +27,7 @@ export default function LoginPage() {
             ACHARYA RAJESH
           </h1>
           <p className="mt-2 text-xs font-black uppercase tracking-[0.4em] text-brand-gold">
-            Vedic Astrology Journal
+             Astrology Journal
           </p>
           <div className="mt-8 h-px w-16 bg-brand-gold/40"></div>
         </div>

@@ -21,76 +21,97 @@ export default async function Home() {
           
           <div className="mx-auto max-w-4xl relative z-10">
             <span className="inline-block mb-6 rounded-full border border-brand-gold/30 bg-brand-gold/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand-navy">
-              Vedic Astrology & Spiritual Guidance
+               Astrology & Spiritual Guidance
             </span>
             <h1 className="mb-8 text-5xl md:text-7xl font-display font-medium text-brand-navy leading-tight">
               Align Your Life with <br/>
               <span className="italic text-brand-gold">Cosmic Wisdom</span>
             </h1>
             <p className="mx-auto mb-10 max-w-2xl text-lg text-brand-navy/70 leading-relaxed font-hindi">
-              Discover clarity in chaos through ancient Vedic insights. Acharya Rajesh brings you precise predictions, remedial measures, and spiritual counseling to navigate life's journey.
+              Explore ancient  knowledge, daily panchang, and spiritual insights to navigate life's journey with clarity and purpose.
             </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-              <Link 
-                href="/book" 
-                className="rounded-full bg-brand-navy px-8 py-4 text-sm font-bold uppercase tracking-widest text-brand-gold shadow-xl hover:bg-brand-navy/90 transition-all hover:scale-105 active:scale-95"
-              >
-                Book Consultation
-              </Link>
+            
+            <div className="flex flex-wrap justify-center gap-4">
               <Link 
                 href="/journal" 
-                className="flex items-center gap-2 text-brand-navy font-bold text-sm uppercase tracking-widest hover:text-brand-gold transition-colors"
+                className="group flex items-center gap-2 rounded-full bg-brand-navy px-8 py-4 text-sm font-bold uppercase tracking-widest text-brand-gold shadow-lg hover:bg-brand-navy/90 hover:scale-105 transition-all"
               >
-                Read the Journal <ArrowRight size={16} />
+                Read Journal <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link 
+                href="/about" 
+                className="flex items-center gap-2 rounded-full border border-brand-navy/10 bg-white px-8 py-4 text-sm font-bold uppercase tracking-widest text-brand-navy hover:bg-brand-navy/5 hover:border-brand-navy/30 transition-all"
+              >
+                About Acharya Ji
               </Link>
             </div>
           </div>
         </section>
 
-        {/* SERVICES TEASER */}
-        <section className="px-6 py-20 bg-brand-navy/5 border-y border-brand-navy/5">
+        {/* CATEGORIES SECTION */}
+        <section className="px-6 py-16 bg-white/50">
           <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-display text-brand-navy mb-4">Holistic Services</h2>
-              <div className="h-1 w-12 bg-brand-gold mx-auto"></div>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-brand-navy mb-4">Explore by Category</h2>
+              <div className="h-1 w-20 bg-brand-gold mx-auto rounded-full"></div>
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Service 1 */}
-              <div className="bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all group">
-                <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform">
-                  <Moon size={24} />
-                </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">Horoscope Analysis</h3>
-                <p className="text-brand-navy/60 mb-6 text-sm leading-relaxed">
-                  Deep dive into your birth chart (Kundli) to understand your personality, destiny, and life path.
-                </p>
-                <Link href="/services/kundli" className="text-xs font-bold uppercase tracking-widest text-brand-gold hover:text-brand-navy transition-colors">Learn More &rarr;</Link>
-              </div>
 
-              {/* Service 2 */}
-              <div className="bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all group">
-                 <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform">
-                  <Sun size={24} />
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {/* Category: Astrology */}
+              <Link href="/journal?category=Astrology" className="group">
+                <div className="h-full bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all text-center">
+                  <div className="w-16 h-16 mx-auto bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform shadow-md">
+                    <Moon size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-navy mb-3">Astrology</h3>
+                  <p className="text-brand-navy/60 text-sm leading-relaxed mb-4">
+                    In-depth analysis of planetary movements, zodiac signs, and their impact on your life.
+                  </p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-navy transition-colors">View Articles &rarr;</span>
                 </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">Karam Kaand</h3>
-                <p className="text-brand-navy/60 mb-6 text-sm leading-relaxed">
-                  Comprehensive compatibility analysis (Gun Milan) for a harmonious and prosperous marital life.
-                </p>
-                <Link href="/services/match-making" className="text-xs font-bold uppercase tracking-widest text-brand-gold hover:text-brand-navy transition-colors">Learn More &rarr;</Link>
-              </div>
+              </Link>
 
-              {/* Service 3 */}
-              <div className="bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all group">
-                 <div className="w-12 h-12 bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform">
-                  <Star size={24} />
+              {/* Category: Panchang */}
+              <Link href="/journal?category=Panchang" className="group">
+                <div className="h-full bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all text-center">
+                   <div className="w-16 h-16 mx-auto bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform shadow-md">
+                    <Calendar size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-navy mb-3">Panchang</h3>
+                  <p className="text-brand-navy/60 text-sm leading-relaxed mb-4">
+                    Daily  calendar, auspicious timings (Shubh Muhurat), and planetary positions.
+                  </p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-navy transition-colors">View Daily Updates &rarr;</span>
                 </div>
-                <h3 className="text-xl font-bold text-brand-navy mb-3">Vastu</h3>
-                <p className="text-brand-navy/60 mb-6 text-sm leading-relaxed">
-                  Identify the most auspicious times to start new ventures, investments, or important life events.
-                </p>
-                <Link href="/services/muhurat" className="text-xs font-bold uppercase tracking-widest text-brand-gold hover:text-brand-navy transition-colors">Learn More &rarr;</Link>
-              </div>
+              </Link>
+
+              {/* Category: Festivals */}
+              <Link href="/journal?category=Festivals" className="group">
+                <div className="h-full bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all text-center">
+                   <div className="w-16 h-16 mx-auto bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform shadow-md">
+                    <Sun size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-navy mb-3">Festivals</h3>
+                  <p className="text-brand-navy/60 text-sm leading-relaxed mb-4">
+                    Significance, rituals, and dates of major Indian festivals and spiritual observances.
+                  </p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-navy transition-colors">Celebrate &rarr;</span>
+                </div>
+              </Link>
+              
+               {/* Category: Miscellaneous */}
+               <Link href="/journal?category=Misceleneous" className="group">
+                <div className="h-full bg-brand-paper p-8 rounded-2xl border border-brand-navy/5 hover:border-brand-gold/30 hover:shadow-lg transition-all text-center">
+                   <div className="w-16 h-16 mx-auto bg-brand-navy rounded-full flex items-center justify-center mb-6 text-brand-gold group-hover:scale-110 transition-transform shadow-md">
+                    <Star size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-brand-navy mb-3">Miscellaneous</h3>
+                  <p className="text-brand-navy/60 text-sm leading-relaxed mb-4">
+                    General spiritual guidance, Vastu tips, and other wisdom for daily living.
+                  </p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-brand-gold group-hover:text-brand-navy transition-colors">Explore More &rarr;</span>
+                </div>
+              </Link>
             </div>
           </div>
         </section>
@@ -101,7 +122,7 @@ export default async function Home() {
              <div className="flex items-center justify-between mb-12">
                <div>
                   <h2 className="text-3xl font-display text-brand-navy">Latest Insights</h2>
-                  <p className="text-sm text-brand-navy/50 mt-2">Updates from the Vedic Journal</p>
+                  <p className="text-sm text-brand-navy/50 mt-2">Updates from the  Journal</p>
                </div>
                <Link href="/journal" className="hidden md:flex text-xs font-bold uppercase tracking-widest text-brand-navy hover:text-brand-gold transition-colors items-center gap-2">
                  View All <ArrowRight size={14} />

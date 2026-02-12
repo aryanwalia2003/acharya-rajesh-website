@@ -9,12 +9,14 @@ type BlogFeedProps = {
   initialPosts: Post[];
   initialHasMore: boolean;
   initialNextCursor: string | null;
+  category?: string;
 };
 
 export default function BlogFeed({
   initialPosts,
   initialHasMore,
   initialNextCursor,
+  category,
 }: BlogFeedProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -44,6 +46,7 @@ export default function BlogFeed({
     setIsSearching(true);
     searchTimeoutRef.current = setTimeout(async () => {
       try {
+        // TODO: Pass category to searchPosts if we want scoped search
         const results = await searchPosts(searchQuery);
         setSearchResults(results);
       } catch (error) {
@@ -70,7 +73,7 @@ export default function BlogFeed({
 
     setIsLoading(true);
     try {
-      const result = await getLatestPosts(10, nextCursor);
+      const result = await getLatestPosts(10, nextCursor, category);
       setPosts((prev) => [...prev, ...result.posts]);
       setHasMore(result.hasMore);
       setNextCursor(result.nextCursor);
@@ -79,7 +82,7 @@ export default function BlogFeed({
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, hasMore, nextCursor, searchResults]);
+  }, [isLoading, hasMore, nextCursor, searchResults, category]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {

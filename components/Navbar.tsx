@@ -45,7 +45,7 @@ export default function Navbar() {
               ACHARYA RAJESH
             </h1>
             <span className="text-[10px] uppercase tracking-[0.2em] text-brand-gold font-bold">
-              Vedic Astrologer
+               Astrologer
             </span>
           </div>
         </Link>

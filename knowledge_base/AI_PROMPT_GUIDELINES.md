@@ -1,6 +1,6 @@
 # AI Prompt Engineering Context
 
-To ensure the AI doesn't lose the "soul" of the Vedic content, the following rules apply to all LLM requests:
+To ensure the AI doesn't lose the "soul" of the  content, the following rules apply to all LLM requests:
 
 1. **Terminology Retention:** Do not translate specific Sanskrit terms like *Sade Sati*, *Dharma*, *Karma*, *Lagna*, or *Nakshatra*. Keep them in Sanskrit but written in English script (Transliteration).
 2. **Tone:** Maintain a "Scholarly and Respectful" tone. Avoid clickbait language.

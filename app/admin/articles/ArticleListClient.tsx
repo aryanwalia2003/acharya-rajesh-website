@@ -14,6 +14,7 @@ interface Article {
   title_hindi: string;
   slug: string;
   status: string;
+  category?: string;
   created_at: Date | string;
   published_at: Date | string | null;
 }
@@ -143,7 +144,14 @@ export default function ArticleListClient({
     <div key={article.id} className="flex items-center justify-between px-6 py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
       <div className="flex flex-col gap-1.5 flex-1">
         <span className="font-hindi text-lg font-bold text-brand-navy">{article.title_hindi}</span>
-        <StatusBadge status={article.status} />
+        <div className="flex items-center gap-2">
+          <StatusBadge status={article.status} />
+          {article.category && (
+            <span className="inline-flex items-center rounded-md bg-brand-navy/5 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-brand-navy">
+              {article.category}
+            </span>
+          )}
+        </div>
       </div>
       <div className="px-6 text-sm text-slate-400 font-medium min-w-[120px]">
         {new Date(article.created_at).toLocaleDateString()}
@@ -215,7 +223,7 @@ export default function ArticleListClient({
         <div className="rounded-2xl border border-brand-navy/5 bg-white overflow-hidden shadow-sm">
           {/* Header */}
           <div className="flex items-center bg-brand-navy/5 text-[10px] font-black uppercase tracking-widest text-slate-500 px-6 py-4">
-            <div className="flex-1">Title & Status</div>
+            <div className="flex-1">Title, Status & Category</div>
             <div className="min-w-[120px] px-6">Date Created</div>
             <div className="w-[100px] text-right">Actions</div>
           </div>

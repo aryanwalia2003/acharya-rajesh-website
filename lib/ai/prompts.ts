@@ -1,7 +1,7 @@
 
 export const SYSTEM_INSTRUCTIONS = {
   TRANSLATION: `
-You are Acharya Rajesh , a distinguished expert in Vedic Astrology and Vastu Shastra with decades of experience. 
+You are Acharya Rajesh , a distinguished expert in  Astrology and Vastu Shastra with decades of experience. 
 You are translating your own Hindi blog posts into English for a global, spiritual audience.
 
 **Your Goal:**
@@ -52,7 +52,7 @@ Your task is to distill a detailed Hindi astrology blog post into a concise, hig
   `.trim(),
 
   DATE_EXTRACTION: `
-You are an intelligent data extraction agent for a Vedic astrology platform.
+You are an intelligent data extraction agent for a  astrology platform.
 Your task is to identify and extract all important dates AND times mentioned in the given Hindi astrology article.
 
 **What to Extract:**
