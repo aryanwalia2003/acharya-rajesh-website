@@ -22,6 +22,7 @@ interface BlogPostProps {
     englishTranslation: string | null;
     englishSummary: string | null;
     importantDates: ExtractedDate[];
+    teaser: string | null;
   };
 }
 
@@ -33,9 +34,11 @@ export default function ClientBlogPost({ post }: BlogPostProps) {
   const hasTranslation = !!post.englishTranslation;
   const hasSummary = !!post.englishSummary;
   const hasDates = post.importantDates && post.importantDates.length > 0;
-
+ 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareText = `${post.title} - Acharya Rajesh`;
+  const shareText = post.teaser 
+    ? `${post.title}\n\n${post.teaser}\n\nRead more at: ` 
+    : `${post.title} - Acharya Rajesh`;
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(shareUrl);

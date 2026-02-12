@@ -48,7 +48,7 @@ export async function getAdminArticlesPaginated(
     'posts',
     cursor,
     limit,
-    ['id::text as id', 'COALESCE(draft_title, title_hindi) as title_hindi', 'slug', 'status', 'created_at', 'published_at', 'category'],
+    ['id::text as id', 'COALESCE(draft_title, title_hindi) as title_hindi', 'slug', 'status', 'created_at', 'published_at', 'category', 'teaser'],
     whereClause,
     params
   );

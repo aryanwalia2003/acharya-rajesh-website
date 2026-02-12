@@ -15,7 +15,8 @@ export async function getPostForEditing(id: string) {
       slug, 
       tags, 
       status,
-      category 
+      category,
+      teaser 
     FROM posts 
     WHERE id = $1 
     LIMIT 1

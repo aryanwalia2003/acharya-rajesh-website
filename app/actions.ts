@@ -10,6 +10,7 @@ export type Post = {
   category: string;
   slug: string;
   publishedAt: string; // ISO string for cursor
+  teaser?: string;
 };
 
 // Pagination response type
@@ -101,7 +102,8 @@ export async function getPostBySlug(slug: string) {
       english_translation,
       english_summary,
       important_dates,
-      category
+      category,
+      teaser
     FROM posts 
     WHERE slug = $1 AND status = 'PUBLISHED'
     LIMIT 1;
@@ -126,7 +128,13 @@ export async function getPostBySlug(slug: string) {
       // AI-Generated Content
       englishTranslation: row.english_translation || null,
       englishSummary: row.english_summary || null,
-      importantDates: row.important_dates || []
+      importantDates: row.important_dates || [],
+      teaser: row.teaser || null,
+      // Metadata
+      publishedAt: new Date(row.published_at).toISOString(),
+      excerpt: row.content_hindi
+        ? row.content_hindi.replace(/<[^>]*>?/gm, '').substring(0, 160) + "..."
+        : "",
     };
   } catch (error) {
     console.error("Error fetching post by slug:", error);

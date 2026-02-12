@@ -17,6 +17,7 @@ export async function upsertArticle(formData: {
   tags: string[];
   intent: 'DRAFT' | 'PUBLISH';
   category: 'Astrology' | 'Panchang' | 'Festivals' | 'Misceleneous';
+  teaser?: string;
   // AI-Generated Content (Optional - only saved when provided)
   english_translation?: string;
   english_summary?: string;
@@ -38,7 +39,8 @@ export async function upsertArticle(formData: {
       category,
       english_translation,
       english_summary,
-      important_dates
+      important_dates,
+      teaser
     ) 
     VALUES (
       $1, 
@@ -53,7 +55,8 @@ export async function upsertArticle(formData: {
       CASE WHEN $6 = 'PUBLISH' THEN CURRENT_TIMESTAMP ELSE NULL END,
       $10,
       -- AI Content (Set if provided)
-      $7, $8, $9
+      $7, $8, $9,
+      $11
     )
     ON CONFLICT (id) 
     DO UPDATE SET 
@@ -73,6 +76,7 @@ export async function upsertArticle(formData: {
 
       tags = EXCLUDED.tags,
       category = EXCLUDED.category,
+      teaser = EXCLUDED.teaser,
       
       -- SLUG PROTECTION LOGIC:
       -- Only update the slug if the current status in the DB is 'DRAFT'.
@@ -115,7 +119,8 @@ export async function upsertArticle(formData: {
     formData.english_translation || null,
     formData.english_summary || null,
     formData.important_dates ? JSON.stringify(formData.important_dates) : null,
-    formData.category
+    formData.category,
+    formData.teaser || null
   ];
 
   try {
@@ -149,7 +154,7 @@ export async function getPostById(id: string) {
   if (!(await isAdmin())) throw new Error("Unauthorized");
 
   const sql = `
-    SELECT id, title_hindi, content_hindi, tags, status, slug, category
+    SELECT id, title_hindi, content_hindi, tags, status, slug, category, teaser
     FROM posts 
     WHERE id = $1
   `;

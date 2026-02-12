@@ -26,6 +26,7 @@ export default function EditorComponent() {
 
   const [postId, setPostId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
+  const [teaser, setTeaser] = useState("");
   const [content, setContent] = useState(""); // Tracks plain text/HTML for logic
   const [tags, setTags] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -71,6 +72,7 @@ export default function EditorComponent() {
         if (post) {
           setPostId(post.id);
           setTitle(post.title_hindi);
+          setTeaser(post.teaser || "");
           setTags(post.tags || []);
           setContent(post.content_hindi);
           setContent(post.content_hindi);
@@ -119,6 +121,7 @@ export default function EditorComponent() {
         tags: tags,
         intent: 'DRAFT',
         category: category,
+        teaser: teaser,
         // Include AI content if available
         english_translation: englishTranslation,
         english_summary: englishSummary,
@@ -138,7 +141,7 @@ export default function EditorComponent() {
     }, 2000);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [title, content, tags, isLoaded, postId, englishTranslation, englishSummary, extractedDates, category]);
+  }, [title, content, tags, isLoaded, postId, englishTranslation, englishSummary, extractedDates, category, teaser]);
 
   // Check current selection formatting
   const checkFormats = () => {
@@ -191,11 +194,17 @@ export default function EditorComponent() {
     if (!title || !editorRef.current || !postId) return;
 
     // VALIDATION: Category Check
-    if (category === 'Misceleneous' && !confirm("You are publishing under 'Misceleneous'. Are you sure?")) {
+     if (category === 'Misceleneous' && !confirm("You are publishing under 'Misceleneous'. Are you sure?")) {
+         return;
+     }
+ 
+     // VALIDATION: Teaser Check
+     if (!teaser || teaser.trim().length === 0) {
+        alert("Please add a Teaser/Hook sentence before publishing!");
         return;
-    }
+     }
 
-    setIsPublishing(true);
+     setIsPublishing(true);
     
     const result = await upsertArticle({
       id: postId, 
@@ -205,6 +214,7 @@ export default function EditorComponent() {
       tags: tags,
       intent: 'PUBLISH',
       category: category,
+      teaser: teaser,
       // Include AI content
       english_translation: englishTranslation,
       english_summary: englishSummary,
@@ -423,6 +433,15 @@ export default function EditorComponent() {
                 rows={2}
                 className="w-full border-none bg-transparent font-hindi text-4xl md:text-5xl font-black text-brand-navy focus:ring-0 leading-tight py-4 mb-6 placeholder:text-slate-300 resize-none"
                 style={{ minHeight: '60px' }}
+              />
+
+              {/* Teaser Input */}
+              <textarea 
+                value={teaser}
+                onChange={(e) => setTeaser(e.target.value)}
+                placeholder="Write a catchy teaser/hook for social sharing..." 
+                className="w-full border-none bg-brand-gold/5 p-4 rounded-xl text-lg font-bold text-brand-navy focus:ring-1 focus:ring-brand-gold/30 mb-8 placeholder:text-slate-400/70 resize-none font-hindi"
+                rows={2}
               />
 
               {/* THE EDITOR */}

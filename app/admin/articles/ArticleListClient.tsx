@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Globe, EyeOff, Eye, Clock, Edit3, Search, X } from 'lucide-react';
+import { Globe, EyeOff, Eye, Clock, Edit3, Search, X, Share2, Check } from 'lucide-react';
 import Link from 'next/link';
 import { unlistArticle, republishArticle } from '@/app/admin/write/actions';
 import { searchAdminArticles } from './actions';
@@ -15,6 +15,7 @@ interface Article {
   slug: string;
   status: string;
   category?: string;
+  teaser?: string;
   created_at: Date | string;
   published_at: Date | string | null;
 }
@@ -138,6 +139,17 @@ export default function ArticleListClient({
       }
     }
   };
+  
+  const handleShare = (article: Article) => {
+      const shareUrl = `${window.location.origin}/blog/${article.slug}`;
+      const shareText = article.teaser
+        ? `${article.title_hindi}\n\n${article.teaser}\n\nRead more at: ${shareUrl}`
+        : `${article.title_hindi} - Acharya Rajesh ${shareUrl}`;
+
+      // Clipboard Fallback (most reliable for Admin Dashboard on Desktop)
+      navigator.clipboard.writeText(shareText);
+      alert("Article link & teaser copied to clipboard!");
+  };
 
   // Render a single article row
   const renderArticle = (article: Article) => (
@@ -177,6 +189,17 @@ export default function ArticleListClient({
           >
             <Eye size={18} />
           </button>
+        )}
+        
+        {/* Share Button (Always Visible if Published) */}
+        {article.status === 'PUBLISHED' && (
+           <button 
+            onClick={() => handleShare(article)}
+            className="p-2 text-slate-400 hover:text-brand-navy"
+            title="Copy Share Text"
+           >
+             <Share2 size={18} />
+           </button>
         )}
       </div>
     </div>
